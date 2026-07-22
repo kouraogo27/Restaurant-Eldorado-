@@ -20,8 +20,8 @@ if(menuBtn){
 /* ===== PANIER ===== */
 
 let panier = [];
-
 let total = 0;
+const numeroWhatsApp = "22657409835";
 
 
 function ajouterAuPanier(nom, prix){
@@ -71,6 +71,32 @@ function afficherPanier(){
 
     }
 
+    mettreAJourLienWhatsApp();
+
+}
+
+
+function mettreAJourLienWhatsApp(){
+
+    const lienCommande = document.getElementById("lien-commande-whatsapp");
+
+    if(!lienCommande) return;
+
+    if(panier.length === 0){
+        lienCommande.href = "https://wa.me/" + numeroWhatsApp;
+        return;
+    }
+
+    let message = "Bonjour, je souhaite commander :%0A";
+
+    panier.forEach((produit)=>{
+        message += "- " + produit.nom + " (" + produit.prix + " FCFA)%0A";
+    });
+
+    message += "%0ATotal : " + total + " FCFA";
+
+    lienCommande.href = "https://wa.me/" + numeroWhatsApp + "?text=" + message;
+
 }
 
 
@@ -87,8 +113,18 @@ formReservation.addEventListener("submit",(e)=>{
 
     e.preventDefault();
 
+    const donnees = new FormData(formReservation);
+
+    let message = "Bonjour, je souhaite réserver une table :%0A";
+
+    for (let [cle, valeur] of donnees.entries()){
+        message += cle + " : " + valeur + "%0A";
+    }
+
+    window.open("https://wa.me/" + numeroWhatsApp + "?text=" + message, "_blank");
+
     alert(
-    "Votre réservation a été enregistrée. Merci de choisir Eldorado !"
+    "Votre demande de réservation va s'ouvrir sur WhatsApp. Merci d'appuyer sur Envoyer pour la confirmer !"
     );
 
     formReservation.reset();
